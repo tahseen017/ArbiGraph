@@ -1,21 +1,21 @@
 """
-CSE246 Syllabus Optimizations & Analytics (Labs 1, 3, and 4):
+Optimizations & Analytics Modules:
 
-1. MergeSort (Lab 3 — Divide and Conquer, O(N log N)):
+1. MergeSort (Divide and Conquer, O(N log N)):
    Custom recursive MergeSort from scratch to rank discovered arbitrage cycles
    or multi-hop routes by highest net profit % without relying on built-in `sorted()`.
 
-2. Binary Search Break-Even Fee Finder (Lab 1 — Binary Search on Monotonic Answer):
+2. Binary Search Break-Even Fee Finder (Binary Search on Monotonic Answer):
    Because arbitrage profit decreases monotonically as transaction fee `f` increases,
    we binary-search `f` in [0%, 10%] using Bellman-Ford as the feasibility check
    to pinpoint the exact maximum broker fee before all arbitrage disappears.
 
-3. Brute-Force 3-Hop Scanner (Lab 1 — Brute Force Baseline, O(V^3)):
+3. Brute-Force 3-Hop Scanner (Brute Force Baseline, O(V^3)):
    Exhaustively enumerates all 3-currency triangles (i -> j -> k -> i) to benchmark
    speed and demonstrate that Bellman-Ford catches 4-hop/5-hop cycles that 3-hop
    brute force completely misses!
 
-4. Fractional Knapsack Capital Allocator (Lab 4 — Greedy Algorithm):
+4. Fractional Knapsack Capital Allocator (Greedy Algorithm):
    Real orderbooks have finite liquidity caps per cycle before slippage ruins the rate.
    Given trader budget `B` and multiple cycles sorted by profit density via MergeSort,
    greedily allocates capital up to each cycle's liquidity cap to maximize total profit.
@@ -33,7 +33,7 @@ T = TypeVar("T")
 
 
 # =============================================================================
-# LAB 3: DIVIDE-AND-CONQUER MERGESORT (O(N log N))
+# DIVIDE-AND-CONQUER MERGESORT (O(N log N))
 # =============================================================================
 def merge_sort(items: Sequence[T], key_fn: Callable[[T], float], reverse: bool = True) -> List[T]:
     """
@@ -83,7 +83,7 @@ def _merge(
 
 
 # =============================================================================
-# LAB 1: BINARY SEARCH ON ANSWER — BREAK-EVEN TRANSACTION FEE
+# BINARY SEARCH ON ANSWER — BREAK-EVEN TRANSACTION FEE
 # =============================================================================
 @dataclass
 class BisectionStep:
@@ -175,7 +175,7 @@ def find_max_tolerable_fee(
 
 
 # =============================================================================
-# LAB 4: GREEDY FRACTIONAL KNAPSACK — LIQUIDITY-CAPPED CAPITAL ALLOCATION
+# GREEDY FRACTIONAL KNAPSACK — LIQUIDITY-CAPPED CAPITAL ALLOCATION
 # =============================================================================
 @dataclass
 class CycleAllocation:
@@ -202,12 +202,12 @@ def allocate_capital_fractional_knapsack(
     total_budget_usd: float,
 ) -> CapitalAllocationResult:
     """
-    Lab 4 Fractional Knapsack Greedy Optimizer:
+    Fractional Knapsack Greedy Optimizer:
         - Each arbitrage cycle i is an 'item' with:
             * Capacity / weight limit = W_i (orderbook bottleneck liquidity cap in USD)
             * Value / profit at full cap = V_i = W_i * (profit_pct_i / 100)
             * Value-to-weight density    = V_i / W_i = profit_pct_i / 100
-        - Step 1: Sort cycles in descending order of profit density using our Lab 3 MergeSort.
+        - Step 1: Sort cycles in descending order of profit density using our MergeSort.
         - Step 2: Greedily fund whole or fractional liquidity caps until `total_budget_usd` is exhausted.
     """
     ranked_cycles = merge_sort(cycles, key_fn=lambda c: c.profit_pct, reverse=True)
@@ -250,7 +250,7 @@ def allocate_capital_fractional_knapsack(
 
 
 # =============================================================================
-# LAB 1: BRUTE-FORCE 3-HOP BASELINE (O(V^3)) FOR BENCHMARKING
+# BRUTE-FORCE 3-HOP BASELINE (O(V^3)) FOR BENCHMARKING
 # =============================================================================
 @dataclass
 class BruteForceResult:

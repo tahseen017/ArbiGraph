@@ -1,7 +1,7 @@
 """
 Unified Quantitative Analysis Engine.
 
-Orchestrates the CSE246 algorithm pipeline end-to-end for both the Web Dashboard (`app.py`)
+Orchestrates the algorithm pipeline end-to-end for both the Web Dashboard (`app.py`)
 and the Terminal CLI (`cli.py`), returning clean JSON-serializable payloads.
 """
 
@@ -46,7 +46,7 @@ def run_full_market_analysis(
         else ("EUR" if "EUR" in graph.symbol_to_idx and default_src != "EUR" else (currencies[-1] if len(currencies) > 1 else default_src))
     )
 
-    # 1. Bellman-Ford Negative Cycle Detection + Lab 3 MergeSort Ranking
+    # 1. Bellman-Ford Negative Cycle Detection + MergeSort Ranking
     bf_res = detect_arbitrage_bellman_ford(
         graph,
         starting_capital=starting_capital,
@@ -54,18 +54,18 @@ def run_full_market_analysis(
     )
     ranked_cycles = merge_sort(bf_res.cycles, key_fn=lambda c: c.profit_pct, reverse=True)
 
-    # 2. Lab 1 Binary Search on Break-Even Transaction Fee (computed against 0-fee base rates)
+    # 2. Binary Search on Break-Even Transaction Fee (computed against 0-fee base rates)
     zero_fee_graph = build_graph_from_snapshot(snapshot, fee_pct=0.0, rate_overrides=rate_overrides)
     break_even = find_max_tolerable_fee(zero_fee_graph)
 
-    # 3. Lab 4 Fractional Knapsack Liquidity-Capped Capital Allocator
+    # 3. Fractional Knapsack Liquidity-Capped Capital Allocator
     knapsack = allocate_capital_fractional_knapsack(ranked_cycles, trader_budget_usd)
 
-    # 4. Lab 1 Brute-Force 3-Hop Baseline Comparison
+    # 4. Brute-Force 3-Hop Baseline Comparison
     bf3 = brute_force_triangular_arbitrage(graph)
     longer_cycles_count = sum(1 for c in ranked_cycles if len(c.steps) > 3)
 
-    # 5. Lab 8 Johnson's All-Pairs Optimal Routing + Floyd-Warshall Cross-Check
+    # 5. Johnson's All-Pairs Optimal Routing + Floyd-Warshall Cross-Check
     johnsons_res = run_johnsons_algorithm(graph)
     fw_res = run_floyd_warshall(graph)
 

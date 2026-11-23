@@ -106,7 +106,7 @@ def _utc_now_str() -> str:
 def _http_get_json(url: str, timeout: float = 6.0) -> dict:
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": "ArbiGraph-CSE246/1.0", "Accept": "application/json"},
+        headers={"User-Agent": "ArbiGraph/1.0", "Accept": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode("utf-8"))
@@ -300,7 +300,7 @@ def build_graph_from_snapshot(
 ) -> CurrencyGraph:
     """
     Construct a `CurrencyGraph` from `snapshot` and apply any interactive rate overrides
-    entered by the user or instructor during a live demonstration.
+    entered by the user during a live demonstration.
     """
     graph = CurrencyGraph(fee_pct=fee_pct)
     override_map: Dict[Tuple[str, str], Tuple[float, float]] = {}
