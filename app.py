@@ -4,7 +4,7 @@ ArbiGraph Interactive Quant Dashboard Server (Zero External Dependencies).
 
 Binds to 0.0.0.0:8000 by default using Python's built-in `ThreadingHTTPServer`,
 so anyone cloning the repository from GitHub can run `python3 app.py` immediately
-on any university lab PC or laptop without installing web frameworks.
+on any laptop or PC without installing web frameworks.
 """
 
 from __future__ import annotations
@@ -76,7 +76,7 @@ class ArbiGraphRequestHandler(BaseHTTPRequestHandler):
         route = parsed.path
 
         if route == "/api/health":
-            self._send_json({"status": "ok", "engine": "ArbiGraph CSE246"})
+            self._send_json({"status": "ok", "engine": "ArbiGraph"})
             return
 
         if route == "/api/datasets":

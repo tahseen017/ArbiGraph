@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ArbiGraph Terminal CLI — CSE246 Term Project Runner.
+ArbiGraph Terminal CLI — Arbitrage Detection & Currency Routing Runner.
 
 Usage examples:
     python3 cli.py
@@ -29,14 +29,14 @@ RESET = "\033[0m"
 
 def print_banner() -> None:
     print(f"{BOLD}{CYAN}" + "=" * 78)
-    print("  ArbiGraph — FX & Crypto Arbitrage + Multi-Hop Routing Engine (CSE246)")
+    print("  ArbiGraph — FX & Crypto Arbitrage + Multi-Hop Routing Engine")
     print("  Algorithms: Bellman-Ford | Johnson's (BF + Dijkstra) | MergeSort | BinSearch")
     print("=" * 78 + f"{RESET}")
 
 
 def run_cli() -> int:
     parser = argparse.ArgumentParser(
-        description="ArbiGraph CSE246 CLI — Arbitrage Detection & Optimal Currency Routing"
+        description="ArbiGraph CLI — Arbitrage Detection & Optimal Currency Routing"
     )
     parser.add_argument(
         "--dataset",
@@ -128,17 +128,17 @@ def run_cli() -> int:
 
         cmp_bf = report["brute_force_comparison"]
         print(
-            f"\n{BOLD}Lab 1 Brute-Force 3-Hop Baseline:{RESET} Found {cmp_bf['profitable_3hop_count']} 3-hop loops, "
+            f"\n{BOLD}Brute-Force 3-Hop Baseline:{RESET} Found {cmp_bf['profitable_3hop_count']} 3-hop loops, "
             f"MISSED {YELLOW}{cmp_bf['multi_hop_cycles_missed_by_brute_force']}{RESET} longer (4+/5-hop) arbitrage cycle(s)!"
         )
         print(
-            f"{BOLD}Lab 1 Binary Search Break-Even Fee:{RESET} Arbitrage vanishes above fee = "
+            f"{BOLD}Binary Search Break-Even Fee:{RESET} Arbitrage vanishes above fee = "
             f"{CYAN}{be['max_tolerable_fee_pct']:.4f}%{RESET} ({be['iterations']} bisection steps)"
         )
 
         alloc = report["capital_allocation"]
         print(
-            f"\n{BOLD}Lab 4 Fractional Knapsack Capital Allocation (Budget = ${alloc['total_budget_usd']:,.2f}):{RESET}"
+            f"\n{BOLD}Fractional Knapsack Capital Allocation (Budget = ${alloc['total_budget_usd']:,.2f}):{RESET}"
         )
         for item in alloc["allocations"]:
             print(
