@@ -74,7 +74,7 @@ python3 app.py --port 8000
 Then open **`http://localhost:8000`** in your browser to explore:
 * Interactive animated SVG Currency Network Graph
 * Live Kraken Bid/Ask Orderbook & Global FX + `BDT` API feeds (plus offline-safe CSV snapshots)
-* Real-time Transaction Fee Slider & Professor Live Rate Sandbox
+* Real-time Transaction Fee Slider & Custom What-If Quote Simulator
 * Johnson’s Potential Reweighting Inspector & Live $V = 15 \to 160$ Scaling Benchmark Chart
 
 ### 2. Run the Terminal CLI

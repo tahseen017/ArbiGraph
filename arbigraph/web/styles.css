@@ -343,7 +343,7 @@ input[type="range"] {
   justify-content: space-between;
 }
 
-.syllabus-list {
+.mode-list {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -352,7 +352,7 @@ input[type="range"] {
   color: var(--text-muted);
 }
 
-.syllabus-list strong {
+.mode-list strong {
   color: var(--text-main);
 }
 
