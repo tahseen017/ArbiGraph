@@ -1,5 +1,5 @@
 """
-Lab 7: Directed Weighted Graph Representation for Currency Exchange Modeling.
+Directed Weighted Graph Representation for Currency Exchange Modeling.
 
 Mathematical Transformation:
     Suppose currency u converts to currency v at rate R_{u->v} with broker fee f in [0, 1).
@@ -38,7 +38,7 @@ class Edge:
 
 class CurrencyGraph:
     """
-    Maintains three synchronized graph representations from Lab 7:
+    Maintains three synchronized graph representations:
         1. Edge List        -> O(E) iteration for Bellman-Ford
         2. Adjacency List   -> O(deg(u)) neighbor traversal for Dijkstra / Johnson's
         3. Adjacency Matrix -> O(1) rate lookup for Floyd-Warshall & cycle verification
@@ -138,7 +138,7 @@ class CurrencyGraph:
 
     def build_adjacency_matrix(self) -> List[List[float]]:
         """
-        Build V x V weight matrix for Floyd-Warshall (Lab 7 / Lab 8).
+        Build V x V weight matrix for Floyd-Warshall.
         Diagonal entries are 0.0; missing edges are +inf.
         """
         n = self.num_vertices

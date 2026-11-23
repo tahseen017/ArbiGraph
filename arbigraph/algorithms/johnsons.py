@@ -1,5 +1,5 @@
 """
-Lab 8: Johnson's All-Pairs Shortest Path Algorithm for Currency Conversion Routing.
+Johnson's All-Pairs Shortest Path Algorithm for Currency Conversion Routing.
 
 Why Johnson's Algorithm Is Ideal for Currency Markets:
     1. Even in calm markets with ZERO arbitrage, ~50% of edges have negative weights

@@ -1,12 +1,12 @@
 """
-Lab 8 + Lab 1: Bellman-Ford Negative-Weight Cycle Detection & Arbitrage Reconstruction.
+Bellman-Ford Negative-Weight Cycle Detection & Arbitrage Reconstruction.
 
 Core Algorithm:
     1. Multi-Source Initialization (Super-Source Equivalence):
        Initialize dist[v] = 0.0 for all v in V. Mathematically equivalent to adding a
        virtual vertex q with 0-weight directed edges (q -> v) to every currency so
        negative cycles in ANY connected component are guaranteed to be detected.
-    2. Relaxation Passes (1 .. V - 1) with Lab 1 Early-Exit Optimization:
+    2. Relaxation Passes (1 .. V - 1) with Early-Exit Optimization:
        Relax every edge (u, v, w). If no edge improves in an entire pass, terminate
        immediately in O(k * E) where k << V when the market is arbitrage-free.
     3. V-th Pass Negative Cycle Detection:
@@ -62,7 +62,7 @@ class ArbitrageCycle:
 
 @dataclass
 class PassTrace:
-    """Telemetry from a single Bellman-Ford relaxation pass (for UI & viva demo)."""
+    """Telemetry from a single Bellman-Ford relaxation pass (for UI display)."""
     pass_number: int
     relaxations_count: int
     sample_updates: List[str]
@@ -259,7 +259,7 @@ def _run_bf_subgraph(
                 )
             )
 
-        # Lab 1 Optimization: Early exit if zero relaxations occurred
+        # Optimization: Early exit if zero relaxations occurred
         if relax_in_pass == 0:
             early_stopped = True
             break
