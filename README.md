@@ -3,7 +3,6 @@
 ![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero%20External%20Libs-10b981)
 ![Algorithms](https://img.shields.io/badge/Algorithms-100%25%20From%20Scratch-06b6d4)
-![Course](https://img.shields.io/badge/CSE246-Intro%20to%20Algorithms-6366f1)
 
 **ArbiGraph** is an algorithmic quantitative finance engine built **100% from scratch in pure Python** (zero external algorithm, graph, or web-framework dependencies). It models live global foreign exchange (FX) and cryptocurrency orderbooks as directed logarithmic graphs to solve two coupled market problems:
 
@@ -36,11 +35,11 @@ Even with zero arbitrage, every pair with $R^{\text{eff}}_{u \to v} > 1$ produce
 
 ```mermaid
 flowchart LR
-    A[Live Kraken / FX APIs\nor Offline CSV Snapshots] --> B[CurrencyGraph Lab 7\nw = -ln rate * 1-fee]
-    B --> C{Bellman-Ford Lab 8\n+ Early Exit Lab 1}
+    A[Live Kraken / FX APIs\nor Offline CSV Snapshots] --> B[CurrencyGraph\nw = -ln rate * 1-fee]
+    B --> C{Bellman-Ford\n+ Early Exit}
     C -- Negative Cycle Found --> D[V-Step Walkback\nCycle Reconstruction]
-    D --> E[MergeSort Lab 3\n+ Fractional Knapsack Lab 4]
-    D --> F[Binary Search Lab 1\nBreak-Even Fee %]
+    D --> E[MergeSort\n+ Fractional Knapsack]
+    D --> F[Binary Search\nBreak-Even Fee %]
     C -- No Negative Cycle --> G[Johnson's Phase 2\nw_hat = w + h_u - h_v >= 0]
     G --> H[Johnson's Phase 3\nV x MinHeap Dijkstra]
     H --> I[All-Pairs Optimal\nMulti-Hop Routes]
@@ -48,19 +47,19 @@ flowchart LR
 
 ---
 
-## CSE246 Algorithm Mapping (100% Implemented From Scratch)
+## Algorithm Mapping (100% Implemented From Scratch)
 
-| Module File | Algorithm / Data Structure | Syllabus Lab | Complexity | Purpose in ArbiGraph |
-| :--- | :--- | :---: | :---: | :--- |
-| `algorithms/graph.py` | Directed Graph (Edge List, Adj List, Matrix) | **Lab 7** | $O(V + E)$ | Synchronizes log-transformed currency quotes |
-| `algorithms/min_heap.py` | Binary `MinHeap` Priority Queue | **Lab 7 / 8** | $O(\log V)$ | Powers Dijkstra without Python's `heapq` |
-| `algorithms/bellman_ford.py` | Bellman–Ford + Early Exit + $V$-Step Cycle Trace | **Lab 8 + Lab 1** | $O(V \cdot E)$ | Detects & reconstructs $k$-hop arbitrage cycles |
-| `algorithms/johnsons.py` | Johnson’s APSP (`BF` + Reweighting + `Dijkstra`) | **Lab 8** | $O(V^2\log V + VE)$ | Optimal multi-hop currency routing with negative edges |
-| `algorithms/floyd_warshall.py` | Floyd–Warshall Dynamic Programming APSP | **Lab 8** | $O(V^3)$ | Cross-checks Johnson’s to $10^{-12}$ & benchmarks scaling |
-| `algorithms/optimizations.py` | Divide-and-Conquer `merge_sort` | **Lab 3** | $O(N \log N)$ | Ranks arbitrage loops & multi-hop savings by ROI |
-| `algorithms/optimizations.py` | Binary Search on Monotonic Fee | **Lab 1** | $O(V E \log \frac{1}{\epsilon})$ | Pinpoints exact broker fee where arbitrage vanishes |
-| `algorithms/optimizations.py` | Greedy Fractional Knapsack | **Lab 4** | $O(N \log N)$ | Splits trader budget across orderbook liquidity caps |
-| `algorithms/optimizations.py` | Brute-Force 3-Hop Scanner | **Lab 1** | $O(V^3)$ | Baseline proving Bellman–Ford catches $4/5$-hop loops missed by 3-hop brute force |
+| Module File | Algorithm / Data Structure | Complexity | Purpose in ArbiGraph |
+| :--- | :--- | :---: | :--- |
+| `algorithms/graph.py` | Directed Graph (Edge List, Adj List, Matrix) | $O(V + E)$ | Synchronizes log-transformed currency quotes |
+| `algorithms/min_heap.py` | Binary `MinHeap` Priority Queue | $O(\log V)$ | Powers Dijkstra without Python's `heapq` |
+| `algorithms/bellman_ford.py` | Bellman–Ford + Early Exit + $V$-Step Cycle Trace | $O(V \cdot E)$ | Detects & reconstructs $k$-hop arbitrage cycles |
+| `algorithms/johnsons.py` | Johnson’s APSP (`BF` + Reweighting + `Dijkstra`) | $O(V^2\log V + VE)$ | Optimal multi-hop currency routing with negative edges |
+| `algorithms/floyd_warshall.py` | Floyd–Warshall Dynamic Programming APSP | $O(V^3)$ | Cross-checks Johnson’s to $10^{-12}$ & benchmarks scaling |
+| `algorithms/optimizations.py` | Divide-and-Conquer `merge_sort` | $O(N \log N)$ | Ranks arbitrage loops & multi-hop savings by ROI |
+| `algorithms/optimizations.py` | Binary Search on Monotonic Fee | $O(V E \log \frac{1}{\epsilon})$ | Pinpoints exact broker fee where arbitrage vanishes |
+| `algorithms/optimizations.py` | Greedy Fractional Knapsack | $O(N \log N)$ | Splits trader budget across orderbook liquidity caps |
+| `algorithms/optimizations.py` | Brute-Force 3-Hop Scanner | $O(V^3)$ | Baseline proving Bellman–Ford catches $4/5$-hop loops missed by 3-hop brute force |
 
 ---
 
@@ -107,7 +106,7 @@ ArbiGraph/
 ├── app.py                        # Zero-dependency HTTP server + JSON API (0.0.0.0:8000)
 ├── cli.py                        # ANSI-formatted terminal CLI & benchmark runner
 ├── arbigraph/
-│   ├── algorithms/               # 100% from-scratch CSE246 algorithm implementations
+│   ├── algorithms/               # 100% from-scratch algorithm implementations
 │   │   ├── graph.py              #  CurrencyGraph (-ln transform)
 │   │   ├── min_heap.py           # Custom Binary Min-Heap priority queue
 │   │   ├── bellman_ford.py       # Negative cycle detection & reconstruction
@@ -121,8 +120,7 @@ ArbiGraph/
 │   │   └── engine.py             # End-to-end quantitative analysis pipeline
 │   └── web/                      # Dark-mode Quant Dashboard (HTML + CSS + SVG + JS)
 ├── data/                         # Offline-safe FX, BDT Remittance & Crypto CSV snapshots
-├── docs/
-│   └── VIVA_GUIDE.md             # Key viva questions & mathematical answers
+├── docs/                         # Dashboard visual guide (PDF) & user manual
 └── tests/
     └── test_algorithms.py        # Automated unit tests for every algorithm
 ```

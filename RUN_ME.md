@@ -17,7 +17,7 @@ ArbiGraph/
 │   ├── services/
 │   └── web/
 ├── data/                  # Offline CSV snapshots
-├── docs/                  # PDF guide, DOCX build docs, manuals
+├── docs/                  # PDF guide & user manual
 ├── tests/                 # Unit tests
 ├── requirements.txt       # (zero external deps)
 └── RUN_ME.md              # (this file)
@@ -113,11 +113,11 @@ run_dashboard.bat
 |--------------|---------|
 | `app.py` | Web dashboard server — **run this to open the UI** |
 | `cli.py` | Terminal command-line interface |
-| `arbigraph/algorithms/` | All CSE246 algorithms from scratch (Bellman–Ford, Johnson's, Dijkstra, Floyd–Warshall, MergeSort, Binary Search, Knapsack, Brute-Force, MinHeap) |
+| `arbigraph/algorithms/` | All algorithms from scratch (Bellman–Ford, Johnson's, Dijkstra, Floyd–Warshall, MergeSort, Binary Search, Knapsack, Brute-Force, MinHeap) |
 | `arbigraph/services/` | Market data feeds (CSV + live Kraken/FX APIs) and analysis pipeline |
 | `arbigraph/web/` | Dashboard frontend (HTML, CSS, JavaScript) |
 | `data/` | Offline CSV snapshots (no internet needed) |
-| `docs/` | Visual guide PDF, build documentation DOCX, user manual, viva guide |
+| `docs/` | Visual guide PDF & dashboard user manual |
 | `tests/` | 6 automated unit tests |
 
 ---
@@ -142,7 +142,6 @@ Make sure you're running `app.py` first and accessing `http://localhost:8000`. O
 **Need help?**
 - See `docs/DASHBOARD_USER_MANUAL.md` for a plain-English dashboard tour
 - See `docs/ArbiGraph_Dashboard_Guide.pdf` for screenshots of every screen
-- See `docs/VIVA_GUIDE.md` for common instructor questions & answers
 
 ---
 
