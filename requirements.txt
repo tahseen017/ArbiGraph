@@ -1,0 +1,4 @@
+# ArbiGraph runs 100% on the Python 3.10+ Standard Library!
+# Zero third-party packages are required to launch `app.py`, `cli.py`, or unit tests.
+# Optional dev tools if running pytest / linters locally:
+# pytest>=8.0.0

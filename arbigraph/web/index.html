@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArbiGraph — FX &amp; Crypto Arbitrage Signal Terminal &amp; Smart Router</title>
+  <link rel="stylesheet" href="./styles.css?v=4" />
+</head>
+<body>
+  <!-- Institutional Trading Header -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-mark">AG</div>
+      <div>
+        <div class="brand-title">
+          ArbiGraph
+          <span class="version-tag">SIGNAL &amp; ROUTING DESK</span>
+        </div>
+        <div class="brand-subtitle">Cross-Market FX &amp; Crypto Arbitrage Signal Scanner · Multi-Currency Smart Execution</div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div id="regimeBadge" class="regime-badge regime-arb">
+        <span class="pulse-dot"></span>
+        <span id="regimeText">Scanning Orderbooks...</span>
+      </div>
+      <select id="datasetSelect" class="control-select" aria-label="Select Market Feed"></select>
+      <button id="refreshBtn" class="btn btn-primary" title="Refresh market quotes and scan for signals">
+        ↻ Scan Orderbooks
+      </button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <!-- Left Desk Controls Sidebar -->
+    <aside class="sidebar">
+      <section class="panel-box">
+        <div class="section-label">Market Feed &amp; Execution Cost</div>
+        <div id="feedMeta" class="feed-meta">Loading market feed...</div>
+        <div id="feedWarning" class="warning-banner hidden"></div>
+
+        <div class="field-group">
+          <div class="field-header">
+            <label for="feeSlider">Trading Fee per Leg</label>
+            <span id="feeValueLabel" class="mono-pill">0.00%</span>
+          </div>
+          <input type="range" id="feeSlider" min="0" max="1.2" step="0.01" value="0" />
+          <div class="slider-hints">
+            <span>0.00% (VIP / Maker)</span>
+            <span>1.20% (Retail)</span>
+          </div>
+          <button id="snapBreakEvenBtn" class="btn btn-subtle full-width mt-6">
+            ⚡ Simulate Post-Fee Equilibrium
+          </button>
+        </div>
+
+        <div class="two-col-inputs">
+          <div class="field-group">
+            <label for="capitalInput">Ticket Size</label>
+            <input type="number" id="capitalInput" value="1000" min="1" step="100" class="control-input" />
+          </div>
+          <div class="field-group">
+            <label for="budgetInput">Desk Capital ($)</label>
+            <input type="number" id="budgetInput" value="10000" min="100" step="1000" class="control-input" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-box">
+        <div class="section-label">Smart Currency Converter</div>
+        <div class="two-col-inputs">
+          <div class="field-group">
+            <label for="routeFromSelect">Pay Asset</label>
+            <select id="routeFromSelect" class="control-select"></select>
+          </div>
+          <div class="field-group">
+            <label for="routeToSelect">Receive Asset</label>
+            <select id="routeToSelect" class="control-select"></select>
+          </div>
+        </div>
+        <button id="swapRouteBtn" class="btn btn-subtle full-width mt-6">⇄ Swap Currencies</button>
+      </section>
+
+      <section class="panel-box">
+        <div class="section-label">Custom Quote Simulator (What-If)</div>
+        <p class="helper-text">Test a custom broker or OTC desk quote to preview instant signal &amp; PnL impact:</p>
+        <div class="two-col-inputs">
+          <div class="field-group">
+            <label for="ovSource">Sell</label>
+            <input type="text" id="ovSource" placeholder="GBP" maxlength="6" class="control-input mono" />
+          </div>
+          <div class="field-group">
+            <label for="ovTarget">Buy</label>
+            <input type="text" id="ovTarget" placeholder="USD" maxlength="6" class="control-input mono" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="ovRate">Quoted Exchange Rate</label>
+          <input type="number" id="ovRate" placeholder="e.g. 1.2950" step="any" class="control-input mono" />
+        </div>
+        <div class="btn-row">
+          <button id="addOverrideBtn" class="btn btn-accent">Apply Quote</button>
+          <button id="clearOverridesBtn" class="btn btn-subtle">Reset</button>
+        </div>
+        <div id="overridesList" class="overrides-list"></div>
+      </section>
+
+      <section class="panel-box syllabus-card">
+        <div class="section-label">Terminal Operating Mode</div>
+        <ul class="syllabus-list">
+          <li><strong>Signal &amp; Paper Mode:</strong> Scans markets and builds exact order tickets—zero live wallet risk.</li>
+          <li><strong>Arbitrage Signal:</strong> Multi-leg loop returning more of your starting currency than you put in.</li>
+          <li><strong>Smart Routing:</strong> Finds cheaper multi-currency transfer bridges when arbitrage is absent.</li>
+        </ul>
+      </section>
+    </aside>
+
+    <!-- Main Trading & Routing Workspace -->
+    <main class="main-panel">
+      <!-- Top 4 Trading KPIs -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Active Market Coverage</div>
+          <div id="kpiTopology" class="kpi-value">—</div>
+          <div id="kpiNegEdges" class="kpi-sub">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Arbitrage Signal Scanner</div>
+          <div id="kpiArbStatus" class="kpi-value">—</div>
+          <div id="kpiPasses" class="kpi-sub">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Max Fee Tolerance</div>
+          <div id="kpiBreakEven" class="kpi-value">—</div>
+          <div id="kpiBreakSteps" class="kpi-sub">—</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Desk PnL / Routing Edge</div>
+          <div id="kpiLatency" class="kpi-value">—</div>
+          <div id="kpiCrossCheck" class="kpi-sub">—</div>
+        </div>
+      </section>
+
+      <!-- Hero Market Flow Map + Execution Ticket -->
+      <section class="hero-grid">
+        <div class="card graph-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Global Liquidity Flow &amp; Active Trade Path</h2>
+              <p id="graphCaption" class="card-subtitle">Live cross-currency conversion map</p>
+            </div>
+            <div class="graph-legend">
+              <span class="legend-item"><i class="dot dot-arb"></i> Arbitrage Signal</span>
+              <span class="legend-item"><i class="dot dot-route"></i> Smart Conversion</span>
+              <span class="legend-item"><i class="dot dot-quote"></i> Market Pair</span>
+            </div>
+          </div>
+          <div class="svg-container">
+            <svg id="networkSvg" viewBox="0 0 680 430" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+
+        <div class="card ledger-card">
+          <div class="card-header">
+            <div>
+              <h2 id="ledgerTitle" class="card-title">Actionable Order Ticket</h2>
+              <p id="ledgerSubtitle" class="card-subtitle">Step-by-step execution &amp; net payout breakdown</p>
+            </div>
+          </div>
+          <div id="ledgerBody" class="ledger-body"></div>
+        </div>
+      </section>
+
+      <!-- Bottom Desk Analytics Tabs -->
+      <section class="card tabs-section">
+        <div class="tabs-bar" role="tablist">
+          <button class="tab-btn active" data-tab="tab-signals">
+            1. Live Arbitrage Signals &amp; Desk Allocation
+          </button>
+          <button class="tab-btn" data-tab="tab-router">
+            2. Smart Currency Router &amp; Rate Matrix
+          </button>
+          <button class="tab-btn" data-tab="tab-feestress">
+            3. Fee Stress-Test &amp; Margin Cushion
+          </button>
+          <button class="tab-btn" data-tab="tab-throughput">
+            4. Scanner Speed &amp; Market Throughput
+          </button>
+        </div>
+
+        <!-- TAB 1: Live Arbitrage Signals & Capital Split -->
+        <div id="tab-signals" class="tab-pane active">
+          <div id="signalInsightBanner" class="callout-banner"></div>
+
+          <div class="split-tables">
+            <div>
+              <h3 class="sub-heading">Actionable Arbitrage Signals (Click any signal to load ticket)</h3>
+              <div class="table-wrap">
+                <table class="quant-table" id="cyclesTable">
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Execution Loop</th>
+                      <th>Legs</th>
+                      <th>Net ROI %</th>
+                      <th>Ticket Profit</th>
+                      <th>Max Depth</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="sub-heading">Multi-Signal Desk Capital Split (Liquidity-Capped)</h3>
+              <div id="allocationSummary" class="mini-summary"></div>
+              <div class="table-wrap">
+                <table class="quant-table" id="allocationTable">
+                  <thead>
+                    <tr>
+                      <th>Signal Loop</th>
+                      <th>Capital Deployed</th>
+                      <th>Depth Filled</th>
+                      <th>Est. Net PnL</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="sub-heading mt-18">Active Spot &amp; Cross-Desk Orderbook Quotes</h3>
+          <div class="table-wrap max-h-280">
+            <table class="quant-table" id="quotesTable">
+              <thead>
+                <tr>
+                  <th>Pair</th>
+                  <th>Venue / Desk</th>
+                  <th>Quoted Rate</th>
+                  <th>Net Rate (After Fee)</th>
+                  <th>Available Liquidity Cap</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Smart Currency Router & Cross-Rate Matrix -->
+        <div id="tab-router" class="tab-pane">
+          <div id="routerGuardBanner" class="callout-banner"></div>
+
+          <div id="routerContent">
+            <div class="split-tables">
+              <div>
+                <h3 class="sub-heading">Top Multi-Currency Conversion Savings vs. Direct Rates</h3>
+                <div class="table-wrap">
+                  <table class="quant-table" id="savingsTable">
+                    <thead>
+                      <tr>
+                        <th>Transfer Pair</th>
+                        <th>Smart Bridge Path</th>
+                        <th>Smart Rate</th>
+                        <th>Direct Rate</th>
+                        <th>Savings (bps)</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="sub-heading">Venue Liquidity &amp; Net Execution Book</h3>
+                <div class="table-wrap max-h-280">
+                  <table class="quant-table" id="liquidityBookTable">
+                    <thead>
+                      <tr>
+                        <th>Pair</th>
+                        <th>Venue</th>
+                        <th>Gross Quote</th>
+                        <th>Net Rate</th>
+                        <th>Max Fill ($)</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="sub-heading mt-18">Global Cross-Currency Best Execution Matrix (Pay \ Receive)</h3>
+            <div class="table-wrap" id="matrixContainer"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Fee Stress-Test -->
+        <div id="tab-feestress" class="tab-pane">
+          <div id="feeStressSummary" class="callout-banner"></div>
+          <div class="table-wrap">
+            <table class="quant-table" id="feeStressTable">
+              <thead>
+                <tr>
+                  <th>Stress Tier</th>
+                  <th>Lower Fee Bound</th>
+                  <th>Simulated Fee / Leg</th>
+                  <th>Upper Fee Bound</th>
+                  <th>Signal Viability</th>
+                  <th>Peak Remaining ROI</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: Engine Throughput -->
+        <div id="tab-throughput" class="tab-pane">
+          <div class="bench-header">
+            <div>
+              <h3 class="sub-heading">Low-Latency Orderbook Scan &amp; Global Routing Throughput</h3>
+              <p class="helper-text">
+                Measures end-to-end signal detection and full cross-market routing latency from regional desks (15 assets) up to global FX scale (160 assets).
+              </p>
+            </div>
+            <button id="runBenchmarkBtn" class="btn btn-accent">▶ Run Latency Test</button>
+          </div>
+
+          <div class="bench-grid">
+            <div class="svg-chart-wrap">
+              <svg id="benchSvg" viewBox="0 0 580 280" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+            <div class="table-wrap">
+              <table class="quant-table" id="benchTable">
+                <thead>
+                  <tr>
+                    <th>Assets</th>
+                    <th>Live Pairs</th>
+                    <th>Signal Scan</th>
+                    <th>Smart Router</th>
+                    <th>Legacy Grid</th>
+                    <th>Speed Gain</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js?v=4"></script>
+</body>
+</html>
