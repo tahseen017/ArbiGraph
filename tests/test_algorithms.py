@@ -1,5 +1,5 @@
 """
-Unit Test Suite for ArbiGraph Core CSE246 Algorithms.
+Unit Test Suite for ArbiGraph Core Algorithms.
 
 Run with:
     python3 -m unittest discover -s tests -v

@@ -1,5 +1,5 @@
 """
-Lab 8: Floyd-Warshall Dynamic Programming All-Pairs Shortest Path Algorithm.
+Floyd-Warshall Dynamic Programming All-Pairs Shortest Path Algorithm.
 
 Role in ArbiGraph:
     1. Cross-verifies Johnson's Algorithm all-pairs log-distances to 1e-9 precision.

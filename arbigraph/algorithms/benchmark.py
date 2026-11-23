@@ -1,10 +1,10 @@
 """
-Empirical Complexity Benchmark Suite (CSE246 Presentation Module).
+Empirical Complexity Benchmark Suite.
 
 Compares empirical execution times of:
     1. Johnson's Algorithm   O(V^2 log V + V * E)
     2. Floyd-Warshall        O(V^3)
-    3. Bellman-Ford          O(V * E) with Lab 1 Early-Exit vs Worst-Case
+    3. Bellman-Ford          O(V * E) with Early-Exit vs Worst-Case
 
 on sparse hub-and-spoke FX/Crypto graphs where E ~ 5 * V (realistic market topology
 since minor currencies quote against major hubs like USD, EUR, USDT, BTC rather than

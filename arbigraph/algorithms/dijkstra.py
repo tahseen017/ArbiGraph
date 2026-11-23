@@ -1,5 +1,5 @@
 """
-Lab 8: Dijkstra's Single-Source Shortest Path Algorithm (Implemented from Scratch).
+Dijkstra's Single-Source Shortest Path Algorithm (Implemented from Scratch).
 
 Important Mathematical Note for Currency Graphs:
     Raw currency log-weights w(u, v) = -ln(rate) ARE NEGATIVE whenever rate > 1.0
