@@ -108,13 +108,13 @@ ArbiGraph/
 ├── cli.py                        # ANSI-formatted terminal CLI & benchmark runner
 ├── arbigraph/
 │   ├── algorithms/               # 100% from-scratch CSE246 algorithm implementations
-│   │   ├── graph.py              # Lab 7: CurrencyGraph (-ln transform)
+│   │   ├── graph.py              #  CurrencyGraph (-ln transform)
 │   │   ├── min_heap.py           # Custom Binary Min-Heap priority queue
-│   │   ├── bellman_ford.py       # Lab 8 + Lab 1: Negative cycle detection & reconstruction
-│   │   ├── dijkstra.py           # Lab 8: Single-source shortest paths on w_hat >= 0
-│   │   ├── johnsons.py           # Lab 8: 3-phase Johnson's All-Pairs currency router
-│   │   ├── floyd_warshall.py     # Lab 8: O(V^3) DP cross-check & benchmark baseline
-│   │   ├── optimizations.py      # Labs 1, 3, 4: MergeSort, Binary Search Fee, Knapsack
+│   │   ├── bellman_ford.py       # Negative cycle detection & reconstruction
+│   │   ├── dijkstra.py           # Single-source shortest paths on w_hat >= 0
+│   │   ├── johnsons.py           # 3-phase Johnson's All-Pairs currency router
+│   │   ├── floyd_warshall.py     # O(V^3) DP cross-check & benchmark baseline
+│   │   ├── optimizations.py      # MergeSort, Binary Search Fee, Knapsack
 │   │   └── benchmark.py          # Sparse FX graph generator & scaling benchmark
 │   ├── services/
 │   │   ├── market_data.py        # Live Kraken & ER-API/ECB fetchers + CSV loader
